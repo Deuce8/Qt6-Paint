@@ -1,0 +1,104 @@
+QMainWindow {
+    background-color: #0f0f0f;
+}
+
+QListWidget {
+    background-color: #070707;
+    border: 1px solid #f7f7f7;
+    color: #f7f7f7;
+    font-size: 14px;
+}
+
+QListWidget:item:hover {
+    background-color: #ff1f1f;
+    border: 1px solid #f7f7f7;
+    color: #070707;
+    padding: -1px;
+}
+
+QListWidget:item:selected {
+    background-color: #c40f0f;
+    border: 1px solid #f7f7f7;
+    color: #070707;
+    padding: -1px;
+}
+
+QToolButton {
+    border: 1px solid white;
+    background-color: none;
+}
+
+QToolButton:checked{
+    background-color : #c40f0f;
+}
+
+QToolButton:hover{
+    background-color : #ff1f1f;
+}
+
+QToolButton:pressed {
+    background-color: #c40f0f;
+}
+
+QToolBar QPushButton {
+    border: 1px solid white;
+    background-color: none;
+    min-width: 32px;
+    min-height: 32px;
+    max-width: 32px;
+    max-height: 32px;
+}
+
+QPushButton:hover{
+    background-color : #ff1f1f;
+}
+
+QPushButton:pressed {
+    background-color: #c40f0f;
+}
+
+QToolBar {
+    background-color: #070707;
+    spacing: 0px;
+}
+
+QLabel {
+    color: #f7f7f7;
+    font-size: 12px;
+}
+
+QLineEdit {
+    background-color: #070707;
+    color: #f7f7f7;
+    border: 1px solid white;
+}
+
+QDialog {
+    background-color: #070707;
+    color: #f7f7f7;
+}
+
+QDialog QPushButton {
+    border: 1px solid white;
+    color: #f7f7f7;
+}
+
+QDialog QToolButton {
+    border: 1px solid white;
+    color: #f7f7f7;
+    min-width: 0px;
+    min-height: 0px;
+    max-width: 1000px;
+    max-height: 1000px;
+}
+
+QDialog QComboBox {
+    border: 1px solid white;
+    background-color: none;
+}
+
+QDialog QComboBox::drop-down {
+    border: 1px solid white;
+    background-color: #070707;
+    color: #000000;
+}

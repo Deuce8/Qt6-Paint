@@ -1,0 +1,43 @@
+<RCC>
+    <qresource prefix="/assets">
+        <file>icons/add_layer.png</file>
+        <file>icons/airbrush.png</file>
+        <file>icons/canvas.png</file>
+        <file>icons/clear.png</file>
+        <file>icons/copy.png</file>
+        <file>icons/crop.png</file>
+        <file>icons/delete_selection.png</file>
+        <file>icons/down_arrow.png</file>
+        <file>icons/ellipse.png</file>
+        <file>icons/eraser.png</file>
+        <file>icons/eyedropper.png</file>
+        <file>icons/fill.png</file>
+        <file>icons/fill_all.png</file>
+        <file>icons/flat_cap.png</file>
+        <file>icons/layers.png</file>
+        <file>icons/line.png</file>
+        <file>icons/load.png</file>
+        <file>icons/mirror_horizontal.png</file>
+        <file>icons/mirror_vertical.png</file>
+        <file>icons/mouse.png</file>
+        <file>icons/paste.png</file>
+        <file>icons/pencil.png</file>
+        <file>icons/place_selection.png</file>
+        <file>icons/rectangle.png</file>
+        <file>icons/redo.png</file>
+        <file>icons/remove_layer.png</file>
+        <file>icons/rename.png</file>
+        <file>icons/rotate_left.png</file>
+        <file>icons/rotate_right.png</file>
+        <file>icons/round_cap.png</file>
+        <file>icons/save.png</file>
+        <file>icons/save_as.png</file>
+        <file>icons/selection.png</file>
+        <file>icons/square_cap.png</file>
+        <file>icons/transparent_selection.png</file>
+        <file>icons/undo.png</file>
+        <file>icons/up_arrow.png</file>
+        <file>icons/zoom.png</file>
+        <file>style.qss</file>
+    </qresource>
+</RCC>
