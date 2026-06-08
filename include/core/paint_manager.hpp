@@ -163,7 +163,7 @@ public slots:
 
     void updateImageSize(QSize size);
     void updateLayerIndex(int index);
-    void updateLayers(QList<QImage> layers);
+    void updateLayers(QVector<QImage> layers);
     void updateZoom(float zoom);
     void updateOffset(QPointF offset);
     void updateColor(QColor color, bool is_primary);

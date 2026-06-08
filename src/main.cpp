@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QCoreApplication>
 #include <QFile>
-#include <QStyleFactory>
 
 #include "widgets/main_window.hpp"
 #include "core/settings.hpp"

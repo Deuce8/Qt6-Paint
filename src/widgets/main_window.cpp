@@ -13,6 +13,8 @@ MainWindow::MainWindow(int argc, char **argv) : QMainWindow(nullptr) {
     setAcceptDrops(true);
     setContentsMargins(4, 4, 4, 4);
     setWindowTitle("Qt6-Paint");
+    setFocusPolicy(Qt::ClickFocus);
+    setWindowFlags(Qt::Window);
 
     QWidget* central_widget = new QWidget(this);
     central_layout = new QGridLayout(central_widget);
@@ -27,7 +29,7 @@ MainWindow::MainWindow(int argc, char **argv) : QMainWindow(nullptr) {
 
     RibbonUpper* ribbon_upper = new RibbonUpper(central_widget);
     LayerMenu* layer_menu = new LayerMenu(central_widget);
-    layer_menu->hide();
+    layer_menu->setVisible(false);
     Canvas* canvas_widget = new Canvas(central_widget, layer_menu);
     RibbonLower* ribbon_lower = new RibbonLower(central_widget);
 

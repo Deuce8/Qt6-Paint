@@ -23,11 +23,11 @@ private:
     int cache_index;
     int cache_max;
 
-    QList<int> cache_layer_index;
-    QList<QList<QImage>> cache_layers;
-    QList<int> cache_layer_row;
-    QList<QStringList> cache_layer_items;
-    QList<QSize> cache_image_size;
+    QVector<int> cache_layer_index;
+    QVector<QVector<QImage>> cache_layers;
+    QVector<int> cache_layer_row;
+    QVector<QStringList> cache_layer_items;
+    QVector<QSize> cache_image_size;
 
 public slots:
     void undo();
@@ -36,7 +36,7 @@ public slots:
 
 signals:
     void indexChanged(int);
-    void layersChanged(QList<QImage>);
+    void layersChanged(QVector<QImage>);
     void layerMenuChanged(QStringList, int);
     void imageSizeChanged(QSize);
     void stateChanged();

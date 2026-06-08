@@ -31,7 +31,8 @@ Canvas::Canvas(QWidget* parent, LayerMenu* layer_menu) : QWidget(parent) {
     connect(this, &Canvas::mouse_release_event, viewport, &Viewport::mouseRelease);    
     connect(this, &Canvas::mouse_release_event, paint_manager, &PaintManager::mouseRelease);
     connect(this, &Canvas::wheel_event, viewport, &Viewport::wheel);    
-    
+    connect(this, &Canvas::resize_event, viewport, &Viewport::resetZoom);    
+
     // Viewport
     connect(viewport, &Viewport::zoom_changed, paint_manager, &PaintManager::updateZoom);    
     connect(viewport, &Viewport::offset_changed, paint_manager, &PaintManager::updateOffset);
@@ -71,4 +72,8 @@ void Canvas::mouseReleaseEvent(QMouseEvent* event) {
 
 void Canvas::wheelEvent(QWheelEvent* event) {
     emit wheel_event(event);
+}
+
+void Canvas::resizeEvent(QResizeEvent* event) {
+    emit resize_event(event);
 }

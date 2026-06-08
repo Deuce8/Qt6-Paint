@@ -1,11 +1,11 @@
 #include "core/paint_manager.hpp"
-#include <time.h>
+
 // ------------------------------------------------
 // |                 Constructor                  |
 // ------------------------------------------------
 
 PaintManager::PaintManager(QObject* parent, QWidget* canvas) : QObject(parent) {
-    file_path = QString("~/");
+    file_path = QDir::homePath();
     
     this->canvas = canvas;
     QSettings settings = QSettings(this);
@@ -102,7 +102,7 @@ void PaintManager::loadImage(QImage image) {
 }
 
 void PaintManager::loadFile() {
-    file_path =  QFileDialog().getOpenFileName(canvas, "Open Image File", file_path, "Image Files (*.png *.jpg *.bmp *.jpeg);;All Files (*)");
+    file_path = QFileDialog::getOpenFileName(canvas, "Open Image File", file_path, "Image Files (*.png *.jpg *.bmp *.jpeg);;All Files (*)");
     if (file_path.isEmpty())
         return;
     
@@ -110,7 +110,7 @@ void PaintManager::loadFile() {
 }
 
 void PaintManager::saveFileAs() {
-    file_path = QFileDialog().getSaveFileName(canvas, "Save Image File", file_path, "Image Files (*.png *.jpg *.bmp *.jpeg);;All Files (*)");
+    file_path = QFileDialog::getSaveFileName(canvas, "Save Image File", file_path, "Image Files (*.png *.jpg *.bmp *.jpeg);;All Files (*)");
     if (file_path.isEmpty())
         return;
 
@@ -284,7 +284,7 @@ void PaintManager::updateLayerIndex(int index) {
     layer_index = index;
 }
 
-void PaintManager::updateLayers(QList<QImage> layers) {
+void PaintManager::updateLayers(QVector<QImage> layers) {
     this->layers = layers;
 }
 
@@ -738,7 +738,7 @@ void PaintManager::moveCrop(QMouseEvent* event) {
 // |       Layer Functions        |
 // --------------------------------
 
-QList<QImage> PaintManager::getLayers() {
+QVector<QImage> PaintManager::getLayers() {
     return layers;
 }
 
@@ -864,7 +864,7 @@ void PaintManager::drawGrid(QPainter* painter) {
     pen.setCosmetic(true);
     painter->setPen(pen);
 
-    QList<QLine> lines;
+    QVector<QLine> lines;
     for (int i = 1; i < image_size.width(); i++)
         lines.append(QLine(i, 0, i, image_size.height()));
     for (int i = 1; i < image_size.height(); i++)
@@ -1007,13 +1007,12 @@ void PaintManager::floodFill(QMouseEvent* event) {
     const int width = image_size.width();
     const int height = image_size.height();
     const QRgb target_rgba = layers[layer_index].pixelColor(canvasSpace(event->position())).rgb();
-    QPoint original_position = canvasSpace(event->position());
-    
+
     if (target_rgba == color.rgba())
         return;
     
     std::vector<bool> seen(width * height, false);
-    QList<QPoint> queue = {original_position};
+    QVector<QPoint> queue = {canvasSpace(event->position())};
     int i = 0;
     const QImage image = layers[layer_index];
     while (i < queue.count()) {
