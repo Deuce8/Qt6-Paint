@@ -53,6 +53,58 @@ PaintManager::PaintManager(QObject* parent, QWidget* canvas) : QObject(parent) {
 // ------------------------------------------------
 
 // --------------------------------
+// |       Selection Slots        |
+// --------------------------------
+
+void PaintManager::moveSelectionUp() {
+    if (!selection_rect)
+        return;
+    
+    if (!cleared_selection)
+        clearUnderSelection();
+
+    selection_rect.value().translate(0, -1);
+    selection_rect = clampRectF(selection_rect.value());
+    canvas->update();
+}
+
+void PaintManager::moveSelectionDown() {
+    if (!selection_rect)
+        return;
+    
+    if (!cleared_selection)
+        clearUnderSelection();
+
+    selection_rect.value().translate(0, 1);
+    selection_rect = clampRectF(selection_rect.value());
+    canvas->update();
+}
+
+void PaintManager::moveSelectionLeft() {
+    if (!selection_rect)
+        return;
+    
+    if (!cleared_selection)
+        clearUnderSelection();
+
+    selection_rect.value().translate(-1, 0);
+    selection_rect = clampRectF(selection_rect.value());
+    canvas->update();
+}
+
+void PaintManager::moveSelectionRight() {
+    if (!selection_rect)
+        return;
+    
+    if (!cleared_selection)
+        clearUnderSelection();
+
+    selection_rect.value().translate(1, 0);
+    selection_rect = clampRectF(selection_rect.value());
+    canvas->update();
+}
+
+// --------------------------------
 // |       File Management        |
 // --------------------------------
 
@@ -241,6 +293,8 @@ void PaintManager::paste() {
 
 void PaintManager::setTool(int tool_id) {
     this->tool_id = tool_id;
+    
+    placeSelection();
 }
 
 void PaintManager::setCapStyle(int cap_id) {

@@ -25,6 +25,6 @@ HEADERS = include/core/history_manager.hpp \
 
 RESOURCES = assets/resources.qrc
 
-DESTDIR = ./build/
-MOC_DIR = ./build/moc
-OBJECTS_DIR = ./build/objects
+DESTDIR = ./
+MOC_DIR = ./moc
+OBJECTS_DIR = ./objects

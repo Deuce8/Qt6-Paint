@@ -134,6 +134,15 @@ private:
 
 public slots:
     // --------------------------------
+    // |       Selection Slots        |
+    // --------------------------------
+
+    void moveSelectionUp();
+    void moveSelectionDown();
+    void moveSelectionLeft();
+    void moveSelectionRight();
+
+    // --------------------------------
     // |       File Management        |
     // --------------------------------
 
