@@ -40,6 +40,7 @@ QToolButton:pressed {
     background-color: #c40f0f;
 }
 
+LayerMenu QPushButton,
 QToolBar QPushButton {
     border: 1px solid white;
     background-color: none;
@@ -101,4 +102,8 @@ QDialog QComboBox::drop-down {
     border: 1px solid white;
     background-color: #070707;
     color: #000000;
+}
+
+QDialog {
+    background-color: #0f0f0f; 
 }

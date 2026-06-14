@@ -14,6 +14,8 @@
 #include <QClipboard>
 #include <QFileDialog>
 
+#include "dialogs/new_file.hpp"
+
 #include <random>
 #include <optional>
 
@@ -134,6 +136,15 @@ private:
 
 public slots:
     // --------------------------------
+    // |       Selection Slots        |
+    // --------------------------------
+
+    void moveSelectionUp();
+    void moveSelectionDown();
+    void moveSelectionLeft();
+    void moveSelectionRight();
+
+    // --------------------------------
     // |       File Management        |
     // --------------------------------
 
@@ -145,6 +156,7 @@ public slots:
     void saveFile();
     void copy();
     void paste();
+    void newFile();
 
     // --------------------------------
     // |       Tool Management        |
@@ -163,7 +175,7 @@ public slots:
 
     void updateImageSize(QSize size);
     void updateLayerIndex(int index);
-    void updateLayers(QList<QImage> layers);
+    void updateLayers(QVector<QImage> layers);
     void updateZoom(float zoom);
     void updateOffset(QPointF offset);
     void updateColor(QColor color, bool is_primary);

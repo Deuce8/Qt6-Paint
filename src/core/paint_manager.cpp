@@ -1,11 +1,11 @@
 #include "core/paint_manager.hpp"
-#include <time.h>
+
 // ------------------------------------------------
 // |                 Constructor                  |
 // ------------------------------------------------
 
 PaintManager::PaintManager(QObject* parent, QWidget* canvas) : QObject(parent) {
-    file_path = QString("~/");
+    file_path = QDir::homePath();
     
     this->canvas = canvas;
     QSettings settings = QSettings(this);
@@ -51,6 +51,58 @@ PaintManager::PaintManager(QObject* parent, QWidget* canvas) : QObject(parent) {
 // ------------------------------------------------
 // |                    Slots                     |
 // ------------------------------------------------
+
+// --------------------------------
+// |       Selection Slots        |
+// --------------------------------
+
+void PaintManager::moveSelectionUp() {
+    if (!selection_rect)
+        return;
+    
+    if (!cleared_selection)
+        clearUnderSelection();
+
+    selection_rect.value().translate(0, -1);
+    selection_rect = clampRectF(selection_rect.value());
+    canvas->update();
+}
+
+void PaintManager::moveSelectionDown() {
+    if (!selection_rect)
+        return;
+    
+    if (!cleared_selection)
+        clearUnderSelection();
+
+    selection_rect.value().translate(0, 1);
+    selection_rect = clampRectF(selection_rect.value());
+    canvas->update();
+}
+
+void PaintManager::moveSelectionLeft() {
+    if (!selection_rect)
+        return;
+    
+    if (!cleared_selection)
+        clearUnderSelection();
+
+    selection_rect.value().translate(-1, 0);
+    selection_rect = clampRectF(selection_rect.value());
+    canvas->update();
+}
+
+void PaintManager::moveSelectionRight() {
+    if (!selection_rect)
+        return;
+    
+    if (!cleared_selection)
+        clearUnderSelection();
+
+    selection_rect.value().translate(1, 0);
+    selection_rect = clampRectF(selection_rect.value());
+    canvas->update();
+}
 
 // --------------------------------
 // |       File Management        |
@@ -102,7 +154,7 @@ void PaintManager::loadImage(QImage image) {
 }
 
 void PaintManager::loadFile() {
-    file_path =  QFileDialog().getOpenFileName(canvas, "Open Image File", file_path, "Image Files (*.png *.jpg *.bmp *.jpeg);;All Files (*)");
+    file_path = QFileDialog::getOpenFileName(canvas, "Open Image File", file_path, "Image Files (*.png *.jpg *.bmp *.jpeg);;All Files (*)");
     if (file_path.isEmpty())
         return;
     
@@ -110,7 +162,7 @@ void PaintManager::loadFile() {
 }
 
 void PaintManager::saveFileAs() {
-    file_path = QFileDialog().getSaveFileName(canvas, "Save Image File", file_path, "Image Files (*.png *.jpg *.bmp *.jpeg);;All Files (*)");
+    file_path = QFileDialog::getSaveFileName(canvas, "Save Image File", file_path, "Image Files (*.png *.jpg *.bmp *.jpeg);;All Files (*)");
     if (file_path.isEmpty())
         return;
 
@@ -235,12 +287,36 @@ void PaintManager::paste() {
     canvas->update();
 }
 
+void PaintManager::newFile() {
+    NewFile new_file(nullptr, image_size);
+    if (new_file.exec() == QDialog::DialogCode::Rejected)
+        return;
+    
+    if (new_file.getSize().isNull())
+        return;
+
+    image_size = new_file.getSize();
+    QImage layer = QImage(image_size, QImage::Format::Format_ARGB32);
+    layer.fill(secondary_color);
+
+    layers.clear();
+    layers.append(layer);
+    layer_index = 0;
+
+    emit layer_size_changed(image_size);
+    emit reset_layers();
+    emit create_restore_point();
+    canvas->update();
+}
+
 // --------------------------------
 // |       Tool Management        |
 // --------------------------------
 
 void PaintManager::setTool(int tool_id) {
     this->tool_id = tool_id;
+    
+    placeSelection();
 }
 
 void PaintManager::setCapStyle(int cap_id) {
@@ -284,7 +360,7 @@ void PaintManager::updateLayerIndex(int index) {
     layer_index = index;
 }
 
-void PaintManager::updateLayers(QList<QImage> layers) {
+void PaintManager::updateLayers(QVector<QImage> layers) {
     this->layers = layers;
 }
 
@@ -738,7 +814,7 @@ void PaintManager::moveCrop(QMouseEvent* event) {
 // |       Layer Functions        |
 // --------------------------------
 
-QList<QImage> PaintManager::getLayers() {
+QVector<QImage> PaintManager::getLayers() {
     return layers;
 }
 
@@ -864,7 +940,7 @@ void PaintManager::drawGrid(QPainter* painter) {
     pen.setCosmetic(true);
     painter->setPen(pen);
 
-    QList<QLine> lines;
+    QVector<QLine> lines;
     for (int i = 1; i < image_size.width(); i++)
         lines.append(QLine(i, 0, i, image_size.height()));
     for (int i = 1; i < image_size.height(); i++)
@@ -1007,13 +1083,12 @@ void PaintManager::floodFill(QMouseEvent* event) {
     const int width = image_size.width();
     const int height = image_size.height();
     const QRgb target_rgba = layers[layer_index].pixelColor(canvasSpace(event->position())).rgb();
-    QPoint original_position = canvasSpace(event->position());
-    
+
     if (target_rgba == color.rgba())
         return;
     
     std::vector<bool> seen(width * height, false);
-    QList<QPoint> queue = {original_position};
+    QVector<QPoint> queue = {canvasSpace(event->position())};
     int i = 0;
     const QImage image = layers[layer_index];
     while (i < queue.count()) {

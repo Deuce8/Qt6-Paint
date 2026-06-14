@@ -5,7 +5,7 @@
 // ------------------------------------------------
 
 RibbonUpper::RibbonUpper(QWidget* parent) : QToolBar(parent) {
-    
+
     // --------------------------------
     // |         Widget Setup         |
     // --------------------------------
@@ -225,6 +225,12 @@ RibbonUpper::RibbonUpper(QWidget* parent) : QToolBar(parent) {
     paste = IO_paste->defaultAction();
     IO_layout->addWidget(IO_paste, 1, 1, 1, 1);
 
+    // New
+    QToolButton* IO_new = createButton(IO_widget, "New File", ":/assets/icons/new_file.png");
+    IO_new->defaultAction()->setShortcut(QKeySequence::StandardKey::New);
+    new_file = IO_new->defaultAction();
+    IO_layout->addWidget(IO_new, 1, 2, 1, 1);
+
     // Final Setup
     IO_widget->setLayout(IO_layout);
     addWidget(IO_widget);
@@ -417,11 +423,11 @@ void RibbonUpper::askSecondaryColor(){
 void RibbonUpper::updateColor(QColor color, bool is_primary){
     if (is_primary) {
         primary_color = color;
-        color_primary->setStyleSheet("QToolButton{{background-color: " + primary_color.name());
+        color_primary->setStyleSheet("QToolButton{background-color: " + primary_color.name() + ";}");
     }
     else {
         secondary_color = color;
-        color_secondary->setStyleSheet("QToolButton{{background-color: " + secondary_color.name());
+        color_secondary->setStyleSheet("QToolButton{background-color: " + secondary_color.name() + ";}");
     }
 }
 

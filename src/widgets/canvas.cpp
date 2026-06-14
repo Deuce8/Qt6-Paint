@@ -19,6 +19,26 @@ Canvas::Canvas(QWidget* parent, LayerMenu* layer_menu) : QWidget(parent) {
     history_manager->createSnapshot();
 
     // --------------------------------
+    // |           QActions           |
+    // --------------------------------
+
+    QAction* arrow_up = new QAction(this);
+    arrow_up->setShortcut(QKeySequence(Qt::Key::Key_Up));
+    this->addAction(arrow_up);
+
+    QAction* arrow_down = new QAction(this);
+    arrow_down->setShortcut(QKeySequence(Qt::Key::Key_Down));
+    this->addAction(arrow_down);
+
+    QAction* arrow_left = new QAction(this);
+    arrow_left->setShortcut(QKeySequence(Qt::Key::Key_Left));
+    this->addAction(arrow_left);
+
+    QAction* arrow_right = new QAction(this);
+    arrow_right->setShortcut(QKeySequence(Qt::Key::Key_Right));
+    this->addAction(arrow_right);
+
+    // --------------------------------
     // |         Wiring Slots         |
     // --------------------------------
 
@@ -31,7 +51,12 @@ Canvas::Canvas(QWidget* parent, LayerMenu* layer_menu) : QWidget(parent) {
     connect(this, &Canvas::mouse_release_event, viewport, &Viewport::mouseRelease);    
     connect(this, &Canvas::mouse_release_event, paint_manager, &PaintManager::mouseRelease);
     connect(this, &Canvas::wheel_event, viewport, &Viewport::wheel);    
-    
+    connect(this, &Canvas::resize_event, viewport, &Viewport::resetZoom);
+    connect(arrow_up, &QAction::triggered, paint_manager, &PaintManager::moveSelectionUp);
+    connect(arrow_down, &QAction::triggered, paint_manager, &PaintManager::moveSelectionDown);
+    connect(arrow_left, &QAction::triggered, paint_manager, &PaintManager::moveSelectionLeft);
+    connect(arrow_right, &QAction::triggered, paint_manager, &PaintManager::moveSelectionRight);
+
     // Viewport
     connect(viewport, &Viewport::zoom_changed, paint_manager, &PaintManager::updateZoom);    
     connect(viewport, &Viewport::offset_changed, paint_manager, &PaintManager::updateOffset);
@@ -71,4 +96,8 @@ void Canvas::mouseReleaseEvent(QMouseEvent* event) {
 
 void Canvas::wheelEvent(QWheelEvent* event) {
     emit wheel_event(event);
+}
+
+void Canvas::resizeEvent(QResizeEvent* event) {
+    emit resize_event(event);
 }

@@ -13,6 +13,8 @@ MainWindow::MainWindow(int argc, char **argv) : QMainWindow(nullptr) {
     setAcceptDrops(true);
     setContentsMargins(4, 4, 4, 4);
     setWindowTitle("Qt6-Paint");
+    setFocusPolicy(Qt::ClickFocus);
+    setWindowFlags(Qt::Window);
 
     QWidget* central_widget = new QWidget(this);
     central_layout = new QGridLayout(central_widget);
@@ -27,7 +29,7 @@ MainWindow::MainWindow(int argc, char **argv) : QMainWindow(nullptr) {
 
     RibbonUpper* ribbon_upper = new RibbonUpper(central_widget);
     LayerMenu* layer_menu = new LayerMenu(central_widget);
-    layer_menu->hide();
+    layer_menu->setVisible(false);
     Canvas* canvas_widget = new Canvas(central_widget, layer_menu);
     RibbonLower* ribbon_lower = new RibbonLower(central_widget);
 
@@ -73,6 +75,7 @@ MainWindow::MainWindow(int argc, char **argv) : QMainWindow(nullptr) {
     connect(ribbon_upper->getSaveAs(), &QAction::triggered, paint_manager, &PaintManager::saveFileAs);
     connect(ribbon_upper->getCopy(), &QAction::triggered, paint_manager, &PaintManager::copy);
     connect(ribbon_upper->getPaste(), &QAction::triggered, paint_manager, &PaintManager::paste);
+    connect(ribbon_upper->getNewFile(), &QAction::triggered, paint_manager, &PaintManager::newFile);
 
     // Layers
     connect(ribbon_upper->getToggleLayers(), &QAction::triggered, layer_menu, &LayerMenu::toggleVisibility);

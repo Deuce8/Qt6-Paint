@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QCoreApplication>
 #include <QFile>
-#include <QStyleFactory>
 
 #include "widgets/main_window.hpp"
 #include "core/settings.hpp"
@@ -15,7 +14,7 @@ int main(int argc, char **argv) {
     app.setOrganizationName("Qt6-Paint");
     app.setApplicationName("Qt6-Paint");
 
-    // Write default settings if no settings are available
+    // Write default settings if no settings are available 
     Settings settings;
 
     // Custom qss style

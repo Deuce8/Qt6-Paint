@@ -5,6 +5,7 @@
 #include <QSettings>
 #include <QWheelEvent>
 #include <QMouseEvent>
+#include <QResizeEvent>
 #include <QPoint>
 
 #include "core/paint_manager.hpp"
@@ -33,6 +34,7 @@ protected:
     void mousePressEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);
     void wheelEvent(QWheelEvent* event);
+    void resizeEvent(QResizeEvent* event);
 
 signals:
     void paint_event(QPaintEvent*);
@@ -40,6 +42,7 @@ signals:
     void mouse_press_event(QMouseEvent*);
     void mouse_release_event(QMouseEvent*);
     void wheel_event(QWheelEvent*);
+    void resize_event(QResizeEvent*);
     void mouse_position(QPoint);
 };
 
