@@ -57,6 +57,3 @@ UI code with it when I figure out how it works.
 
 I heavily control the layout of the UI through code and the style sheet, this is poor design and I plan on making it
 more dynamic in the future.
-
-The use of QRectF for roles that only require QRect is bad, but I also haven't figured out how to fix incorrect
-coordinates and scalings when using QRect. The same applies to QPoint/QPointF.
