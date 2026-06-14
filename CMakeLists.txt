@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(Qt6-Paint VERSION 1.0.2 LANGUAGES CXX)
+project(Qt6-Paint VERSION 1.0.3 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,6 +20,7 @@ set(SRC_FILES
     src/widgets/main_window.cpp
     src/widgets/ribbon_lower.cpp
     src/widgets/ribbon_upper.cpp
+    src/dialogs/new_file.cpp
 )
 
 file(GLOB_RECURSE HEADER_FILES

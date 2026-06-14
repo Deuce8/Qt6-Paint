@@ -287,6 +287,28 @@ void PaintManager::paste() {
     canvas->update();
 }
 
+void PaintManager::newFile() {
+    NewFile new_file(nullptr, image_size);
+    if (new_file.exec() == QDialog::DialogCode::Rejected)
+        return;
+    
+    if (new_file.getSize().isNull())
+        return;
+
+    image_size = new_file.getSize();
+    QImage layer = QImage(image_size, QImage::Format::Format_ARGB32);
+    layer.fill(secondary_color);
+
+    layers.clear();
+    layers.append(layer);
+    layer_index = 0;
+
+    emit layer_size_changed(image_size);
+    emit reset_layers();
+    emit create_restore_point();
+    canvas->update();
+}
+
 // --------------------------------
 // |       Tool Management        |
 // --------------------------------

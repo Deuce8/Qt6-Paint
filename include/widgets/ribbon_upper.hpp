@@ -43,6 +43,7 @@ public:
     QAction* getLoad() const { return load; }
     QAction* getCopy() const { return copy; }
     QAction* getPaste() const { return paste; }
+    QAction* getNewFile() const { return new_file; }
 
     // Layers
     QAction* getToggleLayers() const { return toggle_layers; }
@@ -83,6 +84,7 @@ private:
     QAction* load;
     QAction* copy;
     QAction* paste;
+    QAction* new_file;
 
     // Layers
     QAction* toggle_layers;

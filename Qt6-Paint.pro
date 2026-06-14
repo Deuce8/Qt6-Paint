@@ -9,7 +9,8 @@ SOURCES = src/main.cpp \
         src/widgets/layer_menu.cpp \
         src/widgets/main_window.cpp \
         src/widgets/ribbon_lower.cpp \
-        src/widgets/ribbon_upper.cpp
+        src/widgets/ribbon_upper.cpp \
+        src/dialogs/new_file.cpp
 
 INCLUDEPATH += ./include
 
@@ -21,7 +22,8 @@ HEADERS = include/core/history_manager.hpp \
         include/widgets/layer_menu.hpp \
         include/widgets/main_window.hpp \
         include/widgets/ribbon_lower.hpp \
-        include/widgets/ribbon_upper.hpp
+        include/widgets/ribbon_upper.hpp \
+        include/dialogs/new_file.hpp
 
 RESOURCES = assets/resources.qrc
 

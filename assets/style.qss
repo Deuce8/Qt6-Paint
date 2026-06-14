@@ -103,3 +103,7 @@ QDialog QComboBox::drop-down {
     background-color: #070707;
     color: #000000;
 }
+
+QDialog {
+    background-color: #0f0f0f; 
+}

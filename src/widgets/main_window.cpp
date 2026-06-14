@@ -75,6 +75,7 @@ MainWindow::MainWindow(int argc, char **argv) : QMainWindow(nullptr) {
     connect(ribbon_upper->getSaveAs(), &QAction::triggered, paint_manager, &PaintManager::saveFileAs);
     connect(ribbon_upper->getCopy(), &QAction::triggered, paint_manager, &PaintManager::copy);
     connect(ribbon_upper->getPaste(), &QAction::triggered, paint_manager, &PaintManager::paste);
+    connect(ribbon_upper->getNewFile(), &QAction::triggered, paint_manager, &PaintManager::newFile);
 
     // Layers
     connect(ribbon_upper->getToggleLayers(), &QAction::triggered, layer_menu, &LayerMenu::toggleVisibility);

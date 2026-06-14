@@ -39,5 +39,6 @@
         <file>icons/up_arrow.png</file>
         <file>icons/zoom.png</file>
         <file>style.qss</file>
+        <file>icons/new_file.png</file>
     </qresource>
 </RCC>

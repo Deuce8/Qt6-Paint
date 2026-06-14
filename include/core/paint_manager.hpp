@@ -14,6 +14,8 @@
 #include <QClipboard>
 #include <QFileDialog>
 
+#include "dialogs/new_file.hpp"
+
 #include <random>
 #include <optional>
 
@@ -154,6 +156,7 @@ public slots:
     void saveFile();
     void copy();
     void paste();
+    void newFile();
 
     // --------------------------------
     // |       Tool Management        |
