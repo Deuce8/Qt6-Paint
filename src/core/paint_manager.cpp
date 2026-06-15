@@ -1015,28 +1015,23 @@ void PaintManager::drawPreview(QPainter* painter) {
             break;
         case 9:
             pen.setColor(QColor(QSettings().value("Selection/highlight_color", "#c40f0f").toString()));
-            pen.setWidth(1);
+            pen.setCosmetic(true);
             pen.setCapStyle(Qt::PenCapStyle::SquareCap);
             pen.setStyle(Qt::PenStyle::DashLine);
             painter->setPen(pen);
 
-            if (last_mouse_click && !dragging_selection) {
-                painter->setOpacity(0.75);
-                painter->drawRect(QRect(last_mouse_click.value(), last_mouse_point_active.value() + QPoint(-1, -1)).toRectF().adjusted(0.5, 0.5, 0.5, 0.5));
-                painter->setOpacity(1);
-            }
+            if (last_mouse_click && !dragging_selection)
+                painter->drawRect(unorderedQRect(last_mouse_click.value(), last_mouse_point_active.value()));
 
             if (!selection_rect || !selection_image)
                 return;
 
-            painter->setOpacity(0.75);
             painter->drawImage(selection_rect.value(), selection_image.value());
-            painter->drawRect(selection_rect.value().toRectF().adjusted(0.5, 0.5, -0.5, -0.5));
-            painter->setOpacity(1);
+            painter->drawRect(selection_rect.value());
             break;
         case 10:
             pen.setColor(QColor(QSettings().value("Selection/highlight_color", "#c40f0f").toString()));
-            pen.setWidth(1);
+            pen.setCosmetic(true);
             pen.setCapStyle(Qt::PenCapStyle::SquareCap);
             pen.setStyle(Qt::PenStyle::DashLine);
             painter->setPen(pen);
@@ -1044,9 +1039,7 @@ void PaintManager::drawPreview(QPainter* painter) {
             if (!last_mouse_click)
                 return;
 
-            painter->setOpacity(0.75);
-            painter->drawRect(QRect(last_mouse_click.value(), last_mouse_point_active.value() + QPoint(-1, -1)).toRectF().adjusted(0.5, 0.5, 0.5, 0.5));
-            painter->setOpacity(1);
+            painter->drawRect(unorderedQRect(last_mouse_click.value(), last_mouse_point_active.value()));
             break;
     }
 }

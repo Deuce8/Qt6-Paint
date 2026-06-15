@@ -64,6 +64,7 @@ Canvas::Canvas(QWidget* parent, LayerMenu* layer_menu) : QWidget(parent) {
     // Paint Manager
     connect(paint_manager, &PaintManager::create_restore_point, history_manager, &HistoryManager::createSnapshot);    
     connect(paint_manager, &PaintManager::layer_size_changed, viewport, &Viewport::updateImageSize);
+    connect(paint_manager, &PaintManager::layer_size_changed, viewport, &Viewport::resetZoom);
 
     // History Manager
     connect(history_manager, &HistoryManager::imageSizeChanged, viewport, &Viewport::updateImageSize);    
