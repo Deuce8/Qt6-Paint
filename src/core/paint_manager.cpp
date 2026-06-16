@@ -1218,6 +1218,7 @@ void PaintManager::ellipse(QMouseEvent* event) {
     pen.setJoinStyle(Qt::PenJoinStyle::MiterJoin);
     painter->setPen(pen);
 
+    // https://doc.qt.io/archives/qt-5.15/qrect.html#rendering
     painter->drawEllipse(QRect(last_mouse_click.value(), canvasSpace(event->position()) + QPoint(-1, -1)));
     painter->end();
     delete painter;
@@ -1234,6 +1235,7 @@ void PaintManager::rectangle(QMouseEvent* event) {
     pen.setJoinStyle(Qt::PenJoinStyle::MiterJoin);
     painter->setPen(pen);
 
+    // https://doc.qt.io/archives/qt-5.15/qrect.html#rendering
     painter->drawRect(QRect(last_mouse_click.value(), canvasSpace(event->position()) + QPoint(-1, -1)));
     painter->end();
     delete painter;

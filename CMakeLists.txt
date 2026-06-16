@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(Qt6-Paint VERSION 1.0.4 LANGUAGES CXX)
+project(Qt6-Paint VERSION 1.0.5 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

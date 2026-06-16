@@ -57,3 +57,5 @@ UI code with it when I figure out how it works.
 
 I heavily control the layout of the UI through code and the style sheet, this is poor design and I plan on making it
 more dynamic in the future.
+
+Perfect circles are drawn with imperfections, I'm not sure why currently.
