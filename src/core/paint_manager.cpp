@@ -32,6 +32,7 @@ PaintManager::PaintManager(QObject* parent, QWidget* canvas) : QObject(parent) {
     right_mouse_pressed = false;
 
     // Tool Data
+    tool_id = 0;
     tool_size = settings.value("Tools/size", 1).toInt();;
     airbrush_diameter = settings.value("Tools/airbrush_diameter", 8).toInt();
     airbrush_density = settings.value("Tools/airbrush_density", 16).toInt();
@@ -64,7 +65,7 @@ void PaintManager::moveSelectionUp() {
         clearUnderSelection();
 
     selection_rect.value().translate(0, -1);
-    selection_rect = clampRectF(selection_rect.value());
+    selection_rect = clampRect(selection_rect.value());
     canvas->update();
 }
 
@@ -76,7 +77,7 @@ void PaintManager::moveSelectionDown() {
         clearUnderSelection();
 
     selection_rect.value().translate(0, 1);
-    selection_rect = clampRectF(selection_rect.value());
+    selection_rect = clampRect(selection_rect.value());
     canvas->update();
 }
 
@@ -88,7 +89,7 @@ void PaintManager::moveSelectionLeft() {
         clearUnderSelection();
 
     selection_rect.value().translate(-1, 0);
-    selection_rect = clampRectF(selection_rect.value());
+    selection_rect = clampRect(selection_rect.value());
     canvas->update();
 }
 
@@ -100,7 +101,7 @@ void PaintManager::moveSelectionRight() {
         clearUnderSelection();
 
     selection_rect.value().translate(1, 0);
-    selection_rect = clampRectF(selection_rect.value());
+    selection_rect = clampRect(selection_rect.value());
     canvas->update();
 }
 
@@ -235,12 +236,12 @@ void PaintManager::paste() {
         if (tool_id == 9) {
             placeSelection();
             selection_image = image;
-            selection_rect = QRectF(QPointF(0, 0), image.size().toSizeF()).normalized();
-            selection_rect.value().moveTo(last_mouse_point.toPointF() + (selection_rect.value().topLeft() - selection_rect.value().center()).toPoint().toPointF());
+            selection_rect = QRect(QPoint(0, 0), image.size());
+            selection_rect.value().moveTo(last_mouse_point + (selection_rect.value().topLeft() - selection_rect.value().center()));
             cleared_selection = true;
-            selection_rect = clampRectF(selection_rect.value());
+            selection_rect = clampRect(selection_rect.value());
             canvas->update();
-            emit selection_size_changed(selection_rect.value().size().toSize());
+            emit selection_size_changed(selection_rect.value().size());
 
             return;
         }
@@ -546,12 +547,12 @@ void PaintManager::mouseMove(QMouseEvent* event) {
             break;
         case 7:
             if (last_mouse_point_active)
-                emit selection_size_changed(QRectF(last_mouse_click.value().toPointF(), last_mouse_point.toPointF()).normalized().size().toSize());
+                emit selection_size_changed(QRect(last_mouse_click.value(), last_mouse_point + QPoint(-1, -1)).normalized().size() + QSize(1, 1));
             
             break;
         case 8:
             if (last_mouse_point_active)
-                emit selection_size_changed(QRectF(last_mouse_click.value().toPointF(), last_mouse_point.toPointF()).normalized().size().toSize());
+                emit selection_size_changed(QRect(last_mouse_click.value(), last_mouse_point + QPoint(-1, -1)).normalized().size() + QSize(1, 1));
             
             break;
         case 9:
@@ -661,7 +662,7 @@ void PaintManager::pressSelection(QMouseEvent* event) {
     if (!selection_rect)
         return;
 
-    QPointF point = canvasSpace(event->position()).toPointF();
+    QPoint point = canvasSpace(event->position());
     if (selection_rect.value().contains(point)) {
         dragging_selection = true;
         drag_position = point;
@@ -674,8 +675,7 @@ void PaintManager::releaseSelection(QMouseEvent* event) {
     if (event->button() != Qt::MouseButton::LeftButton)
         return;
 
-    QRectF rect = QRectF(clampPoint(last_mouse_click.value()), clampPoint(canvasSpace(event->position()))).normalized();
-    rect.setBottomRight(rect.bottomRight() + QPointF(1, 1));
+    QRect rect = unorderedQRect(clampPoint(last_mouse_click.value()), clampPoint(canvasSpace(event->position())));
 
     if (dragging_selection) {
         dragging_selection = false;
@@ -686,20 +686,20 @@ void PaintManager::releaseSelection(QMouseEvent* event) {
     placeSelection();
 
     if (rect.width() <= 1 && rect.height() <= 1){
-        emit selection_size_changed(QSize(-1, -1));
+        emit selection_size_changed(QSize(0, 0));
         return;
     }
 
     selection_rect = rect;
-    selection_image = layers[layer_index].copy(selection_rect.value().toRect());
-    emit selection_size_changed(rect.size().toSize() - QSize(1, 1));
+    selection_image = layers[layer_index].copy(selection_rect.value());
+    emit selection_size_changed(rect.size());
     if (transparent_selection)
         filterSelection();
 }
 
 void PaintManager::moveSelection(QMouseEvent* event) {
     if (!selection_image && !selection_rect)
-        emit selection_size_changed(QRectF(clampPoint(last_mouse_click.value()), clampPoint(canvasSpace(event->position()))).normalized().size().toSize());
+        emit selection_size_changed(unorderedQRect(clampPoint(last_mouse_click.value()), clampPoint(canvasSpace(event->position()))).size());
 
     if (!dragging_selection || !drag_position)
         return;
@@ -708,8 +708,8 @@ void PaintManager::moveSelection(QMouseEvent* event) {
     QPointF delta = point - drag_position.value();
     drag_position = point;
 
-    selection_rect->translate(delta);
-    selection_rect = clampRectF(selection_rect.value());
+    selection_rect->translate(delta.toPoint());
+    selection_rect = clampRect(selection_rect.value());
 }
 
 void PaintManager::filterSelection() {
@@ -781,10 +781,9 @@ void PaintManager::crop(QMouseEvent* event) {
     if (event->button() != Qt::MouseButton::LeftButton)
         return;
 
-    QRectF rect = QRectF(clampPoint(last_mouse_click.value()), clampPoint(canvasSpace(event->position()))).normalized();
-    rect.setBottomRight(rect.bottomRight() + QPointF(1, 1));
+    QRect rect = unorderedQRect(clampPoint(last_mouse_click.value()), clampPoint(canvasSpace(event->position())));
 
-    image_size = rect.size().toSize();
+    image_size = rect.size();
     emit layer_size_changed(image_size);
 
     for (int i = 0; i < layers.count(); i++){
@@ -792,14 +791,14 @@ void PaintManager::crop(QMouseEvent* event) {
         layer.fill(secondary_color);
 
         QPainter* painter = new QPainter(&layer);
-        painter->drawImage(0, 0, layers[i].copy(rect.toRect()));
+        painter->drawImage(0, 0, layers[i].copy(rect));
         painter->end();
         delete painter;
 
         layers[i] = layer;
     }
 
-    emit selection_size_changed(QSize(-1, -1));
+    emit selection_size_changed(QSize(0, 0));
     canvas->update();
 }
 
@@ -807,7 +806,7 @@ void PaintManager::moveCrop(QMouseEvent* event) {
     if (!selection_image || !selection_rect)
         return;
         
-    emit selection_size_changed(QRectF(clampPoint(last_mouse_click.value()), clampPoint(canvasSpace(event->position()))).normalized().size().toSize());
+    emit selection_size_changed(unorderedQRect(clampPoint(last_mouse_click.value()), clampPoint(canvasSpace(event->position()))).size());
 }
 
 // --------------------------------
@@ -860,24 +859,33 @@ QPoint PaintManager::canvasSpace(QPoint point) {
     return canvasSpace(point.toPointF());
 }
 
-QPointF PaintManager::clampPoint(QPointF point) {
-    return QPointF(
+QPoint PaintManager::clampPoint(QPoint point) {
+    return QPoint(
         std::clamp(static_cast<int>(point.x()), 0, image_size.width() - 1),
         std::clamp(static_cast<int>(point.y()), 0, image_size.height() - 1)
     );
 }
 
-QPointF PaintManager::clampPoint(QPoint point) {
-    return clampPoint(point.toPointF());
-}
-
-QRectF PaintManager::clampRectF(QRectF rect){
+QRect PaintManager::clampRect(QRect rect){
     rect.moveTo(
-        std::clamp(static_cast<double>(rect.left()), 0.0, image_size.width() - rect.width()),
-        std::clamp(static_cast<double>(rect.top()), 0.0, image_size.height() - rect.height())
+        std::clamp(rect.left(), 0, image_size.width() - rect.width()),
+        std::clamp(rect.top(), 0, image_size.height() - rect.height())
     );
 
     return rect;
+}
+
+QRect PaintManager::unorderedQRect(QPoint a, QPoint b) {
+    QPoint _a = QPoint(
+        std::min(a.x(), b.x()),
+        std::min(a.y(), b.y())
+    );
+    QPoint _b = QPoint(
+        std::max(a.x(), b.x()),
+        std::max(a.y(), b.y())
+    );
+
+    return QRect(_a, _b);
 }
 
 void PaintManager::rotate(int measure) {
@@ -897,12 +905,12 @@ void PaintManager::rotate(int measure) {
         emit create_restore_point();
     }
     else {
-        QPointF center = clampPoint(selection_rect.value().center());
+        QPoint center = clampPoint(selection_rect.value().center());
 
         selection_image = selection_image.value().transformed(transform, Qt::TransformationMode::SmoothTransformation);
-        selection_rect = QRectF(QPointF(0, 0), selection_image.value().size().toSizeF()).normalized();
-        selection_rect.value().moveTo(center + (selection_rect.value().topLeft() - selection_rect.value().center()).toPoint().toPointF());
-        selection_rect = clampRectF(selection_rect.value());
+        selection_rect = QRect(QPoint(0, 0), selection_image.value().size());
+        selection_rect.value().moveTo(center + (selection_rect.value().topLeft() - selection_rect.value().center()));
+        selection_rect = clampRect(selection_rect.value());
         ensureSelectionFit();
     }
 
@@ -997,38 +1005,33 @@ void PaintManager::drawPreview(QPainter* painter) {
             if (!last_mouse_point_active || !last_mouse_click)
                 return;
 
-            painter->drawEllipse(QRectF(last_mouse_click.value().toPointF(), last_mouse_point_active.value().toPointF()).normalized().adjusted(0.5, 0.5, 0.5, 0.5));
+            painter->drawEllipse(QRect(last_mouse_click.value(), last_mouse_point_active.value() + QPoint(-1, -1)).toRectF().adjusted(0.5, 0.5, 0.5, 0.5));
             break;
         case 8:
             if (!last_mouse_point_active || !last_mouse_click)
                 return;
             
-            painter->drawRect(QRectF(last_mouse_click.value().toPointF(), last_mouse_point_active.value().toPointF()).normalized().adjusted(0.5, 0.5, 0.5, 0.5));
+            painter->drawRect(QRect(last_mouse_click.value(), last_mouse_point_active.value() + QPoint(-1, -1)).toRectF().adjusted(0.5, 0.5, 0.5, 0.5));
             break;
         case 9:
             pen.setColor(QColor(QSettings().value("Selection/highlight_color", "#c40f0f").toString()));
-            pen.setWidth(1);
+            pen.setCosmetic(true);
             pen.setCapStyle(Qt::PenCapStyle::SquareCap);
             pen.setStyle(Qt::PenStyle::DashLine);
             painter->setPen(pen);
 
-            if (last_mouse_click && !dragging_selection) {
-                painter->setOpacity(0.75);
-                painter->drawRect(QRectF(clampPoint(last_mouse_click.value()), clampPoint(last_mouse_point_active.value())).normalized().adjusted(0.5, 0.5, 0.5, 0.5));
-                painter->setOpacity(1);
-            }
+            if (last_mouse_click && !dragging_selection)
+                painter->drawRect(unorderedQRect(last_mouse_click.value(), last_mouse_point_active.value()));
 
             if (!selection_rect || !selection_image)
                 return;
 
-            painter->setOpacity(0.75);
             painter->drawImage(selection_rect.value(), selection_image.value());
-            painter->drawRect(selection_rect.value().adjusted(0.5, 0.5, -0.5, -0.5));
-            painter->setOpacity(1);
+            painter->drawRect(selection_rect.value());
             break;
         case 10:
             pen.setColor(QColor(QSettings().value("Selection/highlight_color", "#c40f0f").toString()));
-            pen.setWidth(1);
+            pen.setCosmetic(true);
             pen.setCapStyle(Qt::PenCapStyle::SquareCap);
             pen.setStyle(Qt::PenStyle::DashLine);
             painter->setPen(pen);
@@ -1036,9 +1039,7 @@ void PaintManager::drawPreview(QPainter* painter) {
             if (!last_mouse_click)
                 return;
 
-            painter->setOpacity(0.75);
-            painter->drawRect(QRectF(clampPoint(last_mouse_click.value()), clampPoint(last_mouse_point_active.value())).normalized().adjusted(0.5, 0.5, 0.5, 0.5));
-            painter->setOpacity(1);
+            painter->drawRect(unorderedQRect(last_mouse_click.value(), last_mouse_point_active.value()));
             break;
     }
 }
@@ -1217,9 +1218,12 @@ void PaintManager::ellipse(QMouseEvent* event) {
     pen.setJoinStyle(Qt::PenJoinStyle::MiterJoin);
     painter->setPen(pen);
 
-    painter->drawEllipse(QRect(last_mouse_click.value(), canvasSpace(event->position()) + QPoint(-1, -1)).normalized());
+    // https://doc.qt.io/archives/qt-5.15/qrect.html#rendering
+    painter->drawEllipse(QRect(last_mouse_click.value(), canvasSpace(event->position()) + QPoint(-1, -1)));
     painter->end();
     delete painter;
+
+    emit selection_size_changed(QSize(0, 0));
 }
 
 void PaintManager::rectangle(QMouseEvent* event) {
@@ -1231,7 +1235,10 @@ void PaintManager::rectangle(QMouseEvent* event) {
     pen.setJoinStyle(Qt::PenJoinStyle::MiterJoin);
     painter->setPen(pen);
 
-    painter->drawRect(QRect(last_mouse_click.value(), canvasSpace(event->position()) + QPoint(-1, -1)).normalized());
+    // https://doc.qt.io/archives/qt-5.15/qrect.html#rendering
+    painter->drawRect(QRect(last_mouse_click.value(), canvasSpace(event->position()) + QPoint(-1, -1)));
     painter->end();
     delete painter;
+
+    emit selection_size_changed(QSize(0, 0));
 }

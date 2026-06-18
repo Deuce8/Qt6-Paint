@@ -50,7 +50,7 @@ NewFile::NewFile(QWidget* parent, QSize size) : QDialog(parent) {
     height_layout->addWidget(height_label);
 
     height_line_edit = new QLineEdit(QString::number(size.height()), this);
-    height_line_edit->setValidator(new QIntValidator(width_line_edit));
+    height_line_edit->setValidator(new QIntValidator(height_line_edit));
     height_layout->addWidget(height_line_edit);
 
     // --------------------------------
@@ -81,10 +81,10 @@ NewFile::NewFile(QWidget* parent, QSize size) : QDialog(parent) {
     this->setLayout(layout);
 }
 
+// ------------------------------------------------
+// |                  Functions                   |
+// ------------------------------------------------
+
 QSize NewFile::getSize() {
     return QSize(width_line_edit->text().toInt(), height_line_edit->text().toInt());
-}
-
-void NewFile::closeEvent(QCloseEvent* event) {
-    emit rejected();
 }

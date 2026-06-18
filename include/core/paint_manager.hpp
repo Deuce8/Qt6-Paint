@@ -6,7 +6,7 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QRectF>
+#include <QRect>
 #include <QImage>
 #include <QWidget>
 #include <QMimeData>
@@ -42,7 +42,7 @@ private:
     QWidget* canvas;
 
     // Selection
-    std::optional<QRectF> selection_rect;
+    std::optional<QRect> selection_rect;
     std::optional<QImage> selection_image;
     bool dragging_selection;
     std::optional<QPointF> drag_position;
@@ -104,9 +104,9 @@ private:
     bool isValidPoint(QPoint point);
     QPoint canvasSpace(QPointF point);
     QPoint canvasSpace(QPoint point);
-    QPointF clampPoint(QPointF point);
-    QPointF clampPoint(QPoint point);
-    QRectF clampRectF(QRectF rect);
+    QPoint clampPoint(QPoint point);
+    QRect clampRect(QRect rect);
+    QRect unorderedQRect(QPoint a, QPoint b);
     void rotate(int measure);
     QPainter* getPainter();
 

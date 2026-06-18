@@ -108,7 +108,7 @@ void RibbonLower::updateMousePosition(QPoint position) {
 }
 
 void RibbonLower::updateSelectionSize(QSize size) {
-    selection_text->setText(QString::number(size.width() + 1) + "x " +  QString::number(size.height() + 1));
+    selection_text->setText(QString::number(size.width()) + "x " +  QString::number(size.height()));
 }
 
 void RibbonLower::updateCanvasSize(QSize size) {

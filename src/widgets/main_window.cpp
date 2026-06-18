@@ -166,7 +166,7 @@ void MainWindow::dragEnterEvent(QDragEnterEvent* event) {
     // Loop through all file paths and search for images
     for(QUrl url : event->mimeData()->urls()){
         QString file = url.toLocalFile().toLower();
-        for (const QString &end : {".png", ".jpg", ".jpeg", ".bmp"}){
+        for (const QString end : {".png", ".jpg", ".jpeg", ".bmp"}){
             if (file.endsWith(end)){
                 event->acceptProposedAction();
                 return;

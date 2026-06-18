@@ -13,6 +13,7 @@
 #include <QColorDialog>
 #include <QGridLayout>
 #include <QIntValidator>
+#include <QHBoxLayout>
 
 class RibbonUpper : public QToolBar {
     Q_OBJECT

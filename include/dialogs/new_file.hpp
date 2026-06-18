@@ -22,9 +22,6 @@ public:
 private:
     QLineEdit* width_line_edit;
     QLineEdit* height_line_edit;
-
-protected:
-    void closeEvent(QCloseEvent* event);
 };
 
 #endif
