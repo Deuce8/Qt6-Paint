@@ -20,7 +20,7 @@ Settings::Settings(QObject* parent) : QObject(parent) {
 
     settings.setValue("History/max_restores", 32);
 
-    settings.setValue("Selection/highlight_color", "#c40f0f");
+    settings.setValue("Selection/highlight_color", "#e62d42");
 
     settings.setValue("Zoom/factor", 1.5);
     settings.setValue("Zoom/minimum", 0.25);

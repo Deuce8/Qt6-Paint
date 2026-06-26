@@ -1014,7 +1014,7 @@ void PaintManager::drawPreview(QPainter* painter) {
             painter->drawRect(QRect(last_mouse_click.value(), last_mouse_point_active.value() + QPoint(-1, -1)).toRectF().adjusted(0.5, 0.5, 0.5, 0.5));
             break;
         case 9:
-            pen.setColor(QColor(QSettings().value("Selection/highlight_color", "#c40f0f").toString()));
+            pen.setColor(QColor(QSettings().value("Selection/highlight_color", "#e62d42").toString()));
             pen.setCosmetic(true);
             pen.setCapStyle(Qt::PenCapStyle::SquareCap);
             pen.setStyle(Qt::PenStyle::DashLine);
@@ -1030,7 +1030,7 @@ void PaintManager::drawPreview(QPainter* painter) {
             painter->drawRect(selection_rect.value());
             break;
         case 10:
-            pen.setColor(QColor(QSettings().value("Selection/highlight_color", "#c40f0f").toString()));
+            pen.setColor(QColor(QSettings().value("Selection/highlight_color", "#e62d42").toString()));
             pen.setCosmetic(true);
             pen.setCapStyle(Qt::PenCapStyle::SquareCap);
             pen.setStyle(Qt::PenStyle::DashLine);
