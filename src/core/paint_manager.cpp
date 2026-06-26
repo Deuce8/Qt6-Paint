@@ -803,9 +803,6 @@ void PaintManager::crop(QMouseEvent* event) {
 }
 
 void PaintManager::moveCrop(QMouseEvent* event) {
-    if (!selection_image || !selection_rect)
-        return;
-        
     emit selection_size_changed(unorderedQRect(clampPoint(last_mouse_click.value()), clampPoint(canvasSpace(event->position()))).size());
 }
 
@@ -1039,7 +1036,7 @@ void PaintManager::drawPreview(QPainter* painter) {
             if (!last_mouse_click)
                 return;
 
-            painter->drawRect(unorderedQRect(last_mouse_click.value(), last_mouse_point_active.value()));
+            painter->drawRect(unorderedQRect(clampPoint(last_mouse_click.value()), clampPoint(last_mouse_point_active.value())));
             break;
     }
 }
