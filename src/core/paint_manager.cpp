@@ -803,9 +803,6 @@ void PaintManager::crop(QMouseEvent* event) {
 }
 
 void PaintManager::moveCrop(QMouseEvent* event) {
-    if (!selection_image || !selection_rect)
-        return;
-        
     emit selection_size_changed(unorderedQRect(clampPoint(last_mouse_click.value()), clampPoint(canvasSpace(event->position()))).size());
 }
 
@@ -1014,7 +1011,7 @@ void PaintManager::drawPreview(QPainter* painter) {
             painter->drawRect(QRect(last_mouse_click.value(), last_mouse_point_active.value() + QPoint(-1, -1)).toRectF().adjusted(0.5, 0.5, 0.5, 0.5));
             break;
         case 9:
-            pen.setColor(QColor(QSettings().value("Selection/highlight_color", "#c40f0f").toString()));
+            pen.setColor(QColor(QSettings().value("Selection/highlight_color", "#e62d42").toString()));
             pen.setCosmetic(true);
             pen.setCapStyle(Qt::PenCapStyle::SquareCap);
             pen.setStyle(Qt::PenStyle::DashLine);
@@ -1030,7 +1027,7 @@ void PaintManager::drawPreview(QPainter* painter) {
             painter->drawRect(selection_rect.value());
             break;
         case 10:
-            pen.setColor(QColor(QSettings().value("Selection/highlight_color", "#c40f0f").toString()));
+            pen.setColor(QColor(QSettings().value("Selection/highlight_color", "#e62d42").toString()));
             pen.setCosmetic(true);
             pen.setCapStyle(Qt::PenCapStyle::SquareCap);
             pen.setStyle(Qt::PenStyle::DashLine);
@@ -1039,7 +1036,7 @@ void PaintManager::drawPreview(QPainter* painter) {
             if (!last_mouse_click)
                 return;
 
-            painter->drawRect(unorderedQRect(last_mouse_click.value(), last_mouse_point_active.value()));
+            painter->drawRect(unorderedQRect(clampPoint(last_mouse_click.value()), clampPoint(last_mouse_point_active.value())));
             break;
     }
 }

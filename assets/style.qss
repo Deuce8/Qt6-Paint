@@ -1,25 +1,25 @@
 QMainWindow {
-    background-color: #0f0f0f;
+    background-color: #1d1d20;
 }
 
 QListWidget {
-    background-color: #070707;
-    border: 1px solid #f7f7f7;
-    color: #f7f7f7;
+    background-color: #222226;
+    border: 1px solid #ffffff;
+    color: #ffffff;
     font-size: 14px;
 }
 
 QListWidget:item:hover {
-    background-color: #ff1f1f;
-    border: 1px solid #f7f7f7;
-    color: #070707;
+    background-color: #e62d42;
+    border: 1px solid #ffffff;
+    color: #222226;
     padding: -1px;
 }
 
 QListWidget:item:selected {
-    background-color: #c40f0f;
-    border: 1px solid #f7f7f7;
-    color: #070707;
+    background-color: #e62d42;
+    border: 1px solid #ffffff;
+    color: #222226;
     padding: -1px;
 }
 
@@ -28,16 +28,14 @@ QToolButton {
     background-color: none;
 }
 
-QToolButton:checked{
-    background-color : #c40f0f;
-}
-
 QToolButton:hover{
-    background-color : #ff1f1f;
+    background-color : #e62d42;
 }
 
+QToolButton:checked,
 QToolButton:pressed {
-    background-color: #c40f0f;
+    background-color: #e62d42;
+    margin: 0px;
 }
 
 LayerMenu QPushButton,
@@ -51,42 +49,42 @@ QToolBar QPushButton {
 }
 
 QPushButton:hover{
-    background-color : #ff1f1f;
+    background-color : #e62d42;
 }
 
 QPushButton:pressed {
-    background-color: #c40f0f;
+    background-color: #e62d42;
 }
 
 QToolBar {
-    background-color: #070707;
+    background-color: #222226;
     spacing: 0px;
 }
 
 QLabel {
-    color: #f7f7f7;
+    color: #ffffff;
     font-size: 12px;
 }
 
 QLineEdit {
-    background-color: #070707;
-    color: #f7f7f7;
+    background-color: #222226;
+    color: #ffffff;
     border: 1px solid white;
 }
 
 QDialog {
-    background-color: #070707;
-    color: #f7f7f7;
+    background-color: #222226;
+    color: #ffffff;
 }
 
 QDialog QPushButton {
     border: 1px solid white;
-    color: #f7f7f7;
+    color: #ffffff;
 }
 
 QDialog QToolButton {
     border: 1px solid white;
-    color: #f7f7f7;
+    color: #ffffff;
     min-width: 0px;
     min-height: 0px;
     max-width: 1000px;
@@ -100,10 +98,10 @@ QDialog QComboBox {
 
 QDialog QComboBox::drop-down {
     border: 1px solid white;
-    background-color: #070707;
+    background-color: #222226;
     color: #000000;
 }
 
 QDialog {
-    background-color: #0f0f0f; 
+    background-color: #1d1d20; 
 }
