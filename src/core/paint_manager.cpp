@@ -698,7 +698,7 @@ void PaintManager::releaseSelection(QMouseEvent* event) {
 }
 
 void PaintManager::moveSelection(QMouseEvent* event) {
-    if (!selection_image && !selection_rect)
+    if (!dragging_selection)
         emit selection_size_changed(unorderedQRect(clampPoint(last_mouse_click.value()), clampPoint(canvasSpace(event->position()))).size());
 
     if (!dragging_selection || !drag_position)
