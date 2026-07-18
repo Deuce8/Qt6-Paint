@@ -996,7 +996,8 @@ void PaintManager::drawPreview(QPainter* painter) {
             if (!last_mouse_point_active || !last_mouse_click)
                 return;
 
-            painter->drawLine(QPointF(last_mouse_click.value()) + QPointF(0.5, 0.5), QPointF(last_mouse_point_active.value()) + QPointF(0.5, 0.5));
+            painter->drawLine(last_mouse_click.value() + QPointF(0.5 * (tool_size % 2), 0.5 * (tool_size % 2)), 
+                            last_mouse_point_active.value() + QPointF(0.5 * (tool_size % 2), 0.5 * (tool_size % 2)));
             break;
         case 7:
             if (!last_mouse_point_active || !last_mouse_click)
@@ -1201,7 +1202,8 @@ void PaintManager::line(QMouseEvent* event) {
         return;
     
     QPainter* painter = getPainter();
-    painter->drawLine(last_mouse_click.value(), canvasSpace(event->position()));
+    painter->drawLine(last_mouse_click.value() + QPointF(0.5 * (tool_size % 2), 0.5 * (tool_size % 2)), 
+                    canvasSpace(event->position()) + QPointF(0.5 * (tool_size % 2), 0.5 * (tool_size % 2)));
     painter->end();
     delete painter;
 }
