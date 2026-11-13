@@ -157,6 +157,7 @@ public slots:
     void copy();
     void paste();
     void newFile();
+    void resizeCanvas();
 
     // --------------------------------
     // |       Tool Management        |

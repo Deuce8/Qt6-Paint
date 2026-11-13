@@ -73,6 +73,11 @@ RibbonUpper::RibbonUpper(QWidget* parent) : QToolBar(parent) {
     reset_zoom = image_reset_zoom->defaultAction();
     image_layout->addWidget(image_reset_zoom, 0, 3, 1, 1);
 
+    // Clear Image
+    QToolButton* image_resize = createButton(image_resize, "Resize Canvas", ":/assets/icons/resize.png");
+    resize = image_resize->defaultAction();
+    image_layout->addWidget(image_resize, 1, 3, 1, 1);
+
     // Final Setup
     image_widget->setLayout(image_layout);
     addWidget(image_widget);
