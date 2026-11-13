@@ -289,7 +289,7 @@ void PaintManager::paste() {
 }
 
 void PaintManager::newFile() {
-    NewFile new_file(nullptr, image_size);
+    NewFile new_file(nullptr, image_size, "New File");
     if (new_file.exec() == QDialog::DialogCode::Rejected)
         return;
     
@@ -306,6 +306,24 @@ void PaintManager::newFile() {
 
     emit layer_size_changed(image_size);
     emit reset_layers();
+    emit create_restore_point();
+    canvas->update();
+}
+
+void PaintManager::resizeCanvas() {
+    NewFile new_file(nullptr, image_size, "Resize Canvas");
+    if (new_file.exec() == QDialog::DialogCode::Rejected)
+        return;
+    
+    if (new_file.getSize().isNull())
+        return;
+
+    image_size = new_file.getSize();
+    for (int i = 0; i < layers.count(); i++) {
+        layers[i] = layers[i].scaled(image_size, Qt::AspectRatioMode::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation);
+    }
+
+    emit layer_size_changed(image_size);
     emit create_restore_point();
     canvas->update();
 }
@@ -698,7 +716,7 @@ void PaintManager::releaseSelection(QMouseEvent* event) {
 }
 
 void PaintManager::moveSelection(QMouseEvent* event) {
-    if (!selection_image && !selection_rect)
+    if (!dragging_selection)
         emit selection_size_changed(unorderedQRect(clampPoint(last_mouse_click.value()), clampPoint(canvasSpace(event->position()))).size());
 
     if (!dragging_selection || !drag_position)
@@ -996,7 +1014,8 @@ void PaintManager::drawPreview(QPainter* painter) {
             if (!last_mouse_point_active || !last_mouse_click)
                 return;
 
-            painter->drawLine(QPointF(last_mouse_click.value()) + QPointF(0.5, 0.5), QPointF(last_mouse_point_active.value()) + QPointF(0.5, 0.5));
+            painter->drawLine(last_mouse_click.value() + QPointF(0.5 * (tool_size % 2), 0.5 * (tool_size % 2)), 
+                            last_mouse_point_active.value() + QPointF(0.5 * (tool_size % 2), 0.5 * (tool_size % 2)));
             break;
         case 7:
             if (!last_mouse_point_active || !last_mouse_click)
@@ -1015,6 +1034,7 @@ void PaintManager::drawPreview(QPainter* painter) {
             pen.setCosmetic(true);
             pen.setCapStyle(Qt::PenCapStyle::SquareCap);
             pen.setStyle(Qt::PenStyle::DashLine);
+            pen.setWidth(1);
             painter->setPen(pen);
 
             if (last_mouse_click && !dragging_selection)
@@ -1031,6 +1051,7 @@ void PaintManager::drawPreview(QPainter* painter) {
             pen.setCosmetic(true);
             pen.setCapStyle(Qt::PenCapStyle::SquareCap);
             pen.setStyle(Qt::PenStyle::DashLine);
+            pen.setWidth(1);
             painter->setPen(pen);
 
             if (!last_mouse_click)
@@ -1201,7 +1222,8 @@ void PaintManager::line(QMouseEvent* event) {
         return;
     
     QPainter* painter = getPainter();
-    painter->drawLine(last_mouse_click.value(), canvasSpace(event->position()));
+    painter->drawLine(last_mouse_click.value() + QPointF(0.5 * (tool_size % 2), 0.5 * (tool_size % 2)), 
+                    canvasSpace(event->position()) + QPointF(0.5 * (tool_size % 2), 0.5 * (tool_size % 2)));
     painter->end();
     delete painter;
 }

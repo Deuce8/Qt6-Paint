@@ -64,6 +64,7 @@ MainWindow::MainWindow(int argc, char **argv) : QMainWindow(nullptr) {
     connect(ribbon_upper->getMirrorVertical(), &QAction::triggered, paint_manager, &PaintManager::mirrorVertical);
     connect(ribbon_upper->getClear(), &QAction::triggered, paint_manager, &PaintManager::clear);
     connect(ribbon_upper->getResetZoom(), &QAction::triggered, viewport, &Viewport::resetZoom);
+    connect(ribbon_upper->getResize(), &QAction::triggered, paint_manager, &PaintManager::resizeCanvas);
 
     // History
     connect(ribbon_upper->getUndo(), &QAction::triggered, history_manager, &HistoryManager::undo);

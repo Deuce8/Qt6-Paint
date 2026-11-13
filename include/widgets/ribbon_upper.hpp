@@ -33,6 +33,7 @@ public:
     QAction* getMirrorVertical() const { return mirror_vertical; }
     QAction* getClear() const { return clear; }
     QAction* getResetZoom() const { return reset_zoom; }
+    QAction* getResize() const { return resize; }
 
     // History
     QAction* getUndo() const { return undo; }
@@ -74,6 +75,7 @@ private:
     QAction* mirror_vertical;
     QAction* clear;
     QAction* reset_zoom;
+    QAction* resize;
 
     // History
     QAction* undo;
