@@ -10,7 +10,7 @@ which mirrors this UI.
 Before building you must install a version of Qt6. Installation instructions for your operating system can be found on
 the [Qt6 website](https://doc.qt.io/qt-6/get-and-install-qt.html). You will also need to install either cmake or qmake,
 and git if you want to clone the project from a terminal. These instructions assume linux, so will have to be tailored
-depending on your operating system.
+depending on your operating system. Additionally, WebP support can be enabled by installed the Qt6 Image Formats package.
 
 Afterwards you can clone and build the repository:
 

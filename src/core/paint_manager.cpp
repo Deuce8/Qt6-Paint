@@ -155,7 +155,7 @@ void PaintManager::loadImage(QImage image) {
 }
 
 void PaintManager::loadFile() {
-    file_path = QFileDialog::getOpenFileName(canvas, "Open Image File", file_path, "Image Files (*.png *.jpg *.bmp *.jpeg);;All Files (*)");
+    file_path = QFileDialog::getOpenFileName(canvas, "Open Image File", file_path, "Image Files (*.png *.jpg *.bmp *.jpeg *.webp);;All Files (*)");
     if (file_path.isEmpty())
         return;
     
@@ -163,7 +163,7 @@ void PaintManager::loadFile() {
 }
 
 void PaintManager::saveFileAs() {
-    file_path = QFileDialog::getSaveFileName(canvas, "Save Image File", file_path, "Image Files (*.png *.jpg *.bmp *.jpeg);;All Files (*)");
+    file_path = QFileDialog::getSaveFileName(canvas, "Save Image File", file_path, "Image Files (*.png *.jpg *.bmp *.jpeg *.webp);;All Files (*)");
     if (file_path.isEmpty())
         return;
 
