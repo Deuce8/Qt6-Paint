@@ -289,7 +289,7 @@ void PaintManager::paste() {
 }
 
 void PaintManager::newFile() {
-    NewFile new_file(nullptr, image_size, "New File");
+    NewFile new_file(nullptr, image_size);
     if (new_file.exec() == QDialog::DialogCode::Rejected)
         return;
     
@@ -311,14 +311,14 @@ void PaintManager::newFile() {
 }
 
 void PaintManager::resizeCanvas() {
-    NewFile new_file(nullptr, image_size, "Resize Canvas");
-    if (new_file.exec() == QDialog::DialogCode::Rejected)
+    Resize resize(nullptr, image_size);
+    if (resize.exec() == QDialog::DialogCode::Rejected)
         return;
     
-    if (new_file.getSize().isNull())
+    if (resize.getSize().isNull())
         return;
 
-    image_size = new_file.getSize();
+    image_size = resize.getSize();
     for (int i = 0; i < layers.count(); i++) {
         layers[i] = layers[i].scaled(image_size, Qt::AspectRatioMode::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation);
     }

@@ -10,7 +10,8 @@ SOURCES = src/main.cpp \
         src/widgets/main_window.cpp \
         src/widgets/ribbon_lower.cpp \
         src/widgets/ribbon_upper.cpp \
-        src/dialogs/new_file.cpp
+        src/dialogs/new_file.cpp \
+        src/dialogs/resize.cpp
 
 INCLUDEPATH += ./include
 
@@ -23,7 +24,8 @@ HEADERS = include/core/history_manager.hpp \
         include/widgets/main_window.hpp \
         include/widgets/ribbon_lower.hpp \
         include/widgets/ribbon_upper.hpp \
-        include/dialogs/new_file.hpp
+        include/dialogs/new_file.hpp \
+        include/dialogs/resize.hpp
 
 RESOURCES = assets/resources.qrc
 

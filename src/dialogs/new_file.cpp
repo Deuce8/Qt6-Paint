@@ -4,9 +4,9 @@
 // |                 Constructor                  |
 // ------------------------------------------------
 
-NewFile::NewFile(QWidget* parent, QSize size, QString title) : QDialog(parent) {
+NewFile::NewFile(QWidget* parent, QSize size) : QDialog(parent) {
     setFixedSize(256, 108);
-    setWindowTitle(title);
+    setWindowTitle("New File");
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setSpacing(8);
@@ -17,7 +17,7 @@ NewFile::NewFile(QWidget* parent, QSize size, QString title) : QDialog(parent) {
     // --------------------------------
 
     QLabel* label = new QLabel(this);
-    label->setText(title);
+    label->setText("New File");
     QFont font = label->font();
     font.setBold(true);
     font.setUnderline(true);

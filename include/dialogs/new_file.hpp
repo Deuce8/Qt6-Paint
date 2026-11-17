@@ -15,7 +15,7 @@ class NewFile : public QDialog {
     Q_OBJECT
 
 public:
-    NewFile(QWidget* parent, QSize size, QString title);
+    NewFile(QWidget* parent, QSize size);
 
     QSize getSize();
 

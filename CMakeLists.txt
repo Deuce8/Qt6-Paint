@@ -22,11 +22,13 @@ set(SRC_FILES
     src/widgets/ribbon_lower.cpp
     src/widgets/ribbon_upper.cpp
     src/dialogs/new_file.cpp
+    src/dialogs/resize.cpp
 )
 
 file(GLOB_RECURSE HEADER_FILES
     ${CMAKE_SOURCE_DIR}/include/core/*.hpp
     ${CMAKE_SOURCE_DIR}/include/widgets/*.hpp
+    ${CMAKE_SOURCE_DIR}/include/dialogs/*.hpp
 )
 
 qt_add_resources(RESOURCES_FILES assets/resources.qrc)

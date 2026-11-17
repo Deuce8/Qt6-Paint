@@ -15,6 +15,7 @@
 #include <QFileDialog>
 
 #include "dialogs/new_file.hpp"
+#include "dialogs/resize.hpp"
 
 #include <random>
 #include <optional>
