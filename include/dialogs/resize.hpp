@@ -10,7 +10,9 @@
 #include <QSize>
 #include <QLineEdit>
 #include <QIntValidator>
+#include <QDoubleValidator>
 #include <QCheckBox>
+#include <QtMath>
 
 class Resize : public QDialog {
     Q_OBJECT

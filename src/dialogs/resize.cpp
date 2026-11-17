@@ -55,7 +55,7 @@ Resize::Resize(QWidget* parent, QSize size) : QDialog(parent) {
     width_layout->addWidget(width_label);
 
     width_percentage_line_edit = new QLineEdit(QString::number(100), this);
-    width_percentage_line_edit->setValidator(new QIntValidator(width_percentage_line_edit));
+    width_percentage_line_edit->setValidator(new QDoubleValidator(0, INT_MAX, 2, width_percentage_line_edit));
     connect(width_percentage_line_edit, &QLineEdit::textEdited, this, &Resize::widthPercentageChanged);
     width_layout->addWidget(width_percentage_line_edit);
     
@@ -83,7 +83,7 @@ Resize::Resize(QWidget* parent, QSize size) : QDialog(parent) {
     height_layout->addWidget(height_label);
 
     height_percentage_line_edit = new QLineEdit(QString::number(100), this);
-    height_percentage_line_edit->setValidator(new QIntValidator(height_percentage_line_edit));
+    height_percentage_line_edit->setValidator(new QDoubleValidator(0, INT_MAX, 2, height_percentage_line_edit));
     connect(height_percentage_line_edit, &QLineEdit::textEdited, this, &Resize::heightPercentageChanged);
     height_layout->addWidget(height_percentage_line_edit);
 
@@ -135,39 +135,39 @@ Resize::Resize(QWidget* parent, QSize size) : QDialog(parent) {
 // |                    Slots                     |
 // ------------------------------------------------
 
-void Resize::widthPercentageChanged() {
-    width_pixel_line_edit->setText(QString::number(original_size.width() * width_percentage_line_edit->text().toInt() / 100));
-
-    if (maintain_aspect_ratio_checkbox->isChecked()) {
-        height_percentage_line_edit->setText(width_percentage_line_edit->text());
-        height_pixel_line_edit->setText(QString::number(original_size.height() * height_percentage_line_edit->text().toInt() / 100));
-    }
-}
-
-void Resize::heightPercentageChanged() {
-    height_pixel_line_edit->setText(QString::number(original_size.height() * height_percentage_line_edit->text().toInt() / 100));
-
-    if (maintain_aspect_ratio_checkbox->isChecked()) {
-        width_percentage_line_edit->setText(height_percentage_line_edit->text());
-        width_pixel_line_edit->setText(QString::number(original_size.width() * width_percentage_line_edit->text().toInt() / 100));
-    }
-}
-
 void Resize::widthPixelChanged() {
-    width_percentage_line_edit->setText(QString::number(width_pixel_line_edit->text().toInt() * 100 / original_size.width()));
+    width_percentage_line_edit->setText(QString::number(static_cast<double>(width_pixel_line_edit->text().toInt()) * 100.0 / static_cast<double>(original_size.width()), 'f', 2));
 
     if (maintain_aspect_ratio_checkbox->isChecked()) {
         height_percentage_line_edit->setText(width_percentage_line_edit->text());
-        height_pixel_line_edit->setText(QString::number(original_size.height() * height_percentage_line_edit->text().toInt() / 100));
+        height_pixel_line_edit->setText(QString::number(static_cast<int>(static_cast<double>(original_size.height()) * height_percentage_line_edit->text().toDouble() / 100.0)));
+    }
+}
+
+void Resize::widthPercentageChanged() {
+    width_pixel_line_edit->setText(QString::number(static_cast<double>(original_size.width()) * width_percentage_line_edit->text().toDouble() / 100.0));
+
+    if (maintain_aspect_ratio_checkbox->isChecked()) {
+        height_percentage_line_edit->setText(width_percentage_line_edit->text());
+        height_pixel_line_edit->setText(QString::number(static_cast<int>(static_cast<double>(original_size.height()) * height_percentage_line_edit->text().toDouble() / 100.0)));
     }
 }
 
 void Resize::heightPixelChanged() {
-    height_percentage_line_edit->setText(QString::number(height_pixel_line_edit->text().toInt() * 100 / original_size.height()));
+    height_percentage_line_edit->setText(QString::number(static_cast<double>(height_pixel_line_edit->text().toInt()) * 100.0 / static_cast<double>(original_size.height()), 'f', 2));
 
     if (maintain_aspect_ratio_checkbox->isChecked()) {
         width_percentage_line_edit->setText(height_percentage_line_edit->text());
-        width_pixel_line_edit->setText(QString::number(original_size.width() * width_percentage_line_edit->text().toInt() / 100));
+        width_pixel_line_edit->setText(QString::number(static_cast<int>(static_cast<double>(original_size.width()) * width_percentage_line_edit->text().toDouble() / 100.0)));
+    }
+}
+
+void Resize::heightPercentageChanged() {
+    height_pixel_line_edit->setText(QString::number(static_cast<double>(original_size.height()) * height_percentage_line_edit->text().toDouble() / 100.0));
+
+    if (maintain_aspect_ratio_checkbox->isChecked()) {
+        width_percentage_line_edit->setText(height_percentage_line_edit->text());
+        width_pixel_line_edit->setText(QString::number(static_cast<int>(static_cast<double>(original_size.width()) * width_percentage_line_edit->text().toDouble() / 100.0)));
     }
 }
 
