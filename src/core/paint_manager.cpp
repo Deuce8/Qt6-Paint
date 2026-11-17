@@ -310,24 +310,6 @@ void PaintManager::newFile() {
     canvas->update();
 }
 
-void PaintManager::resizeCanvas() {
-    Resize resize(nullptr, image_size);
-    if (resize.exec() == QDialog::DialogCode::Rejected)
-        return;
-    
-    if (resize.getSize().isNull())
-        return;
-
-    image_size = resize.getSize();
-    for (int i = 0; i < layers.count(); i++) {
-        layers[i] = layers[i].scaled(image_size, Qt::AspectRatioMode::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation);
-    }
-
-    emit layer_size_changed(image_size);
-    emit create_restore_point();
-    canvas->update();
-}
-
 // --------------------------------
 // |       Tool Management        |
 // --------------------------------
@@ -662,6 +644,35 @@ void PaintManager::placeSelection() {
     cleared_selection = false;
     emit create_restore_point();
 
+    canvas->update();
+}
+
+void PaintManager::resizeCanvas() {
+    Resize resize(nullptr, selection_rect ? selection_rect.value().size() : image_size);
+    if (resize.exec() == QDialog::DialogCode::Rejected)
+        return;
+    
+    if (resize.getSize().isNull())
+        return;
+
+    if (selection_rect) {
+        if (!cleared_selection)
+            clearUnderSelection();
+
+        selection_rect->setSize(resize.getSize());
+        selection_image = selection_image.value().scaled(resize.getSize(), Qt::AspectRatioMode::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation);
+        selection_rect = clampRect(selection_rect.value());
+    }
+    else {
+        image_size = resize.getSize();
+        for (int i = 0; i < layers.count(); i++) {
+            layers[i] = layers[i].scaled(image_size, Qt::AspectRatioMode::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation);
+        }
+
+        emit layer_size_changed(image_size);
+    }
+
+    emit create_restore_point();
     canvas->update();
 }
 

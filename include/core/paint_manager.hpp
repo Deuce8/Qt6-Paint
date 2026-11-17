@@ -158,7 +158,6 @@ public slots:
     void copy();
     void paste();
     void newFile();
-    void resizeCanvas();
 
     // --------------------------------
     // |       Tool Management        |
@@ -212,6 +211,7 @@ public slots:
     void rotateCounterClockwise();
     void deleteSelection();
     void placeSelection();
+    void resizeCanvas();
 
 signals:
     void create_restore_point();
